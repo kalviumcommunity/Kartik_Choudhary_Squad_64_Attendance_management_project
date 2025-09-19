@@ -1,27 +1,22 @@
-package com.school;
-
 public class Main {
     public static void main(String[] args) {
-        Student[] students = {
-            new Student("Alice", 1),
-            new Student("Bob", 2),
-            new Student("Charlie", 3)
-        };
+        // Creating Students
+        Student s1 = new Student("Alice");
+        Student s2 = new Student("Bob");
+        Student s3 = new Student("Charlie");
 
-        Course[] courses = {
-            new Course("Mathematics", "MATH101"),
-            new Course("Computer Science", "CS102"),
-            new Course("Physics", "PHY103")
-        };
+        // Creating Courses
+        Course c1 = new Course("Mathematics");
+        Course c2 = new Course("Physics");
+        Course c3 = new Course("Computer Science");
 
-        System.out.println("Students:");
-        for (Student s : students) {
-            System.out.println(s);
-        }
+        // Displaying details
+        s1.displayDetails();
+        s2.displayDetails();
+        s3.displayDetails();
 
-        System.out.println("\nCourses:");
-        for (Course c : courses) {
-            System.out.println(c);
-        }
+        c1.displayDetails();
+        c2.displayDetails();
+        c3.displayDetails();
     }
 }
