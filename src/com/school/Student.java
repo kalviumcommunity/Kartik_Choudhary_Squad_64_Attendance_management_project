@@ -1,24 +1,16 @@
-package com.school;
-
 public class Student {
+    private static int nextStudentIdCounter = 1; // Auto-increment counter
+    private int studentId;
     private String name;
-    private int id;
 
-    public Student(String name, int id) {
+    // Constructor
+    public Student(String name) {
+        this.studentId = nextStudentIdCounter++;
         this.name = name;
-        this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public String toString() {
-        return "Student{id=" + id + ", name='" + name + "'}";
+    // Display method
+    public void displayDetails() {
+        System.out.println("Student ID: S" + studentId + ", Name: " + name);
     }
 }

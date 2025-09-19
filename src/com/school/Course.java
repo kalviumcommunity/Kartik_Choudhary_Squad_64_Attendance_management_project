@@ -1,24 +1,16 @@
-package com.school;
-
 public class Course {
-    private String title;
-    private String code;
+    private static int nextCourseIdCounter = 101; // Start IDs from 101
+    private int courseId;
+    private String courseName;
 
-    public Course(String title, String code) {
-        this.title = title;
-        this.code = code;
+    // Constructor
+    public Course(String courseName) {
+        this.courseId = nextCourseIdCounter++;
+        this.courseName = courseName;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    @Override
-    public String toString() {
-        return "Course{code='" + code + "', title='" + title + "'}";
+    // Display method
+    public void displayDetails() {
+        System.out.println("Course ID: C" + courseId + ", Name: " + courseName);
     }
 }
