@@ -1,27 +1,20 @@
-package com.school;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
     public static void main(String[] args) {
-        Student student1 = new Student(1, "Alice");
-        Student student2 = new Student(2, "Bob");
+        Student student = new Student("Alice", "10th Grade");
+        Teacher teacher = new Teacher("Mr. Brown", "Mathematics");
+        Staff staff = new Staff("John", "Librarian");
 
-        Course course1 = new Course(101, "Math");
-        Course course2 = new Course(102, "Science");
+        System.out.println("\n--- Student Details ---");
+        student.displayDetails();
 
-        // Attendance log
-        List<AttendanceRecord> attendanceLog = new ArrayList<>();
+        System.out.println("\n--- Teacher Details ---");
+        teacher.displayDetails();
 
-        // Add records (one invalid)
-        attendanceLog.add(new AttendanceRecord(student1.getStudentId(), course1.getCourseId(), "Present"));
-        attendanceLog.add(new AttendanceRecord(student2.getStudentId(), course2.getCourseId(), "Absent"));
-        attendanceLog.add(new AttendanceRecord(student1.getStudentId(), course2.getCourseId(), "Late")); // Invalid
+        System.out.println("\n--- Staff Details ---");
+        staff.displayDetails();
 
-        // Display all records
-        for (AttendanceRecord record : attendanceLog) {
-            record.displayRecord();
-        }
+        // Example AttendanceRecord usage
+        AttendanceRecord record = new AttendanceRecord(student.getId(), "2025-10-11", true);
+        record.displayRecord();
     }
 }
