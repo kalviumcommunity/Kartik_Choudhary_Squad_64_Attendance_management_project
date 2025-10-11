@@ -1,3 +1,5 @@
+package com.school;
+
 public class Teacher extends Person {
     private String subjectTaught;
 
@@ -9,6 +11,7 @@ public class Teacher extends Person {
     @Override
     public void displayDetails() {
         super.displayDetails();
-        System.out.println("Subject Taught: " + subjectTaught + ", Role: Teacher");
+        System.out.println("Subject: " + subjectTaught);
+        System.out.println("Role: Teacher");
     }
 }
