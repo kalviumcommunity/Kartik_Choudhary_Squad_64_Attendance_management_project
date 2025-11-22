@@ -1,34 +1,28 @@
 package com.school;
 
-public class Student extends Person implements Storable {
-    private String gradeLevel;
+public class Student extends Person implements Storable { // Extends Person
 
-    // Constructor
+    private String gradeLevel; // Example new specific field
+
     public Student(String name, String gradeLevel) {
-        super(name); // Call parent constructor
+        super(name); // Calls Person constructor
         this.gradeLevel = gradeLevel;
     }
 
-    // Getter for grade level
+    // Getter for gradeLevel (optional for now, focus on display)
     public String getGradeLevel() {
         return gradeLevel;
     }
 
-    // Override display details to add student-specific info
-    @Override
+    @Override // Good practice to indicate overriding
     public void displayDetails() {
-        System.out.println("Student ID: " + this.getId() + ", Name: " + this.getName() + 
-                          ", Grade Level: " + this.gradeLevel);
+        super.displayDetails(); // Call Person's displayDetails
+        System.out.println(", Grade Level: " + gradeLevel + " (Role: Student)");
     }
 
-    // Keep getStudentId() for backward compatibility
-    public int getStudentId() {
-        return this.getId();
-    }
-
-    // Implement Storable interface - CSV format
     @Override
     public String toDataString() {
-        return this.getId() + "," + this.getName() + "," + this.gradeLevel;
+        // Format: id,name,gradeLevel
+        return getId() + "," + getName() + "," + gradeLevel;
     }
 }
