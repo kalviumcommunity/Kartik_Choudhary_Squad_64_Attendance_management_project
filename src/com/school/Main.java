@@ -1,88 +1,61 @@
 package com.school;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
-        // Create students with grade levels
-        Student student1 = new Student("Alice", "Grade 10");
-        Student student2 = new Student("Bob", "Grade 11");
 
-        // Create teachers
-        Teacher teacher1 = new Teacher("Ms. Johnson", "Mathematics");
-        Teacher teacher2 = new Teacher("Mr. Smith", "Science");
-
-        // Create staff members
-        Staff staff1 = new Staff("Mrs. Davis", "Administrator");
-        Staff staff2 = new Staff("Mr. Wilson", "Janitor");
-
-        // Create courses
-        Course course1 = new Course("Mathematics");
-        Course course2 = new Course("Science");
-
-        // Display students
-        System.out.println("=== Students ===");
-        student1.displayDetails();
-        student2.displayDetails();
-
-        // Display teachers
-        System.out.println("\n=== Teachers ===");
-        teacher1.displayDetails();
-        teacher2.displayDetails();
-
-        // Display staff
-        System.out.println("\n=== Staff ===");
-        staff1.displayDetails();
-        staff2.displayDetails();
-
-        // Display courses
-        System.out.println("\n=== Courses ===");
-        course1.displayDetails();
-        course2.displayDetails();
-
-        // Attendance Log
-        List<AttendanceRecord> attendanceLog = new ArrayList<>();
-
-        // Add attendance records using inherited getId() method
-        attendanceLog.add(new AttendanceRecord(student1.getId(), course1.getCourseId(), "Present"));
-        attendanceLog.add(new AttendanceRecord(student2.getId(), course2.getCourseId(), "Absent"));
-        attendanceLog.add(new AttendanceRecord(student1.getId(), course2.getCourseId(), "Late")); // invalid
-
-        // Display attendance
-        System.out.println("\n=== Attendance Records ===");
-        for (AttendanceRecord record : attendanceLog) {
-            record.displayRecord();
+    // displaySchoolDirectory is now better placed in RegistrationService or a ReportService
+    // For now, let's make it use RegistrationService data
+    public static void displaySchoolDirectory(RegistrationService regService) {
+        System.out.println("\n--- School Directory ---");
+        List<Person> people = regService.getAllPeople();
+        if (people.isEmpty()) {
+            System.out.println("No people registered.");
+            return;
         }
-
-        // Demonstrate polymorphism - all Person objects can be stored in a Person array
-        // System.out.println("\n=== Polymorphism Demo ===");
-        Person[] people = {student1, student2, teacher1, teacher2, staff1, staff2};
         for (Person person : people) {
-            person.displayDetails(); // Each calls its own overridden version
+            person.displayDetails();
         }
+    }
 
-        // Part 6: Interface-Driven Persistence with Storage
-        System.out.println("\n=== Saving Data to Files ===");
-        
-        // Create lists for storage
-        List<Student> students = new ArrayList<>();
-        students.add(student1);
-        students.add(student2);
-        
-        List<Course> courses = new ArrayList<>();
-        courses.add(course1);
-        courses.add(course2);
-        
-        // Save data to files using FileStorageService
-        FileStorageService.saveData(students, "students.txt");
-        FileStorageService.saveData(courses, "courses.txt");
-        FileStorageService.saveData(attendanceLog, "attendance_log.txt");
-        
-        System.out.println("\n=== Data Saved Successfully ===");
-        System.out.println("Check the following files:");
-        System.out.println("- students.txt");
-        System.out.println("- courses.txt");
-        System.out.println("- attendance_log.txt");
+    public static void main(String[] args) {
+        System.out.println("--- School System (SRP Demo) ---");
+
+        // --- Setup Services ---
+        FileStorageService storageService = new FileStorageService();
+        RegistrationService registrationService = new RegistrationService(storageService);
+        // AttendanceService now depends on RegistrationService
+        AttendanceService attendanceService = new AttendanceService(storageService, registrationService);
+
+        // --- Registering Entities via RegistrationService ---
+        System.out.println("\n--- Registering People and Courses ---");
+        Student student1 = registrationService.registerStudent("Alice Wonderland", "Grade 10");
+        Student student2 = registrationService.registerStudent("Bob The Builder", "Grade 9");
+        registrationService.registerTeacher("Dr. Emily Carter", "Physics");
+        registrationService.registerStaff("Mr. John Davis", "Librarian");
+
+        Course course1 = registrationService.createCourse("Intro to Programming");
+        Course course2 = registrationService.createCourse("Data Structures");
+
+        // Display directory using data from RegistrationService
+        displaySchoolDirectory(registrationService);
+
+        System.out.println("\n\n--- Marking Attendance ---");
+        // Mark attendance using Student and Course objects
+        attendanceService.markAttendance(student1, course1, "Present");
+        // Mark attendance using studentId and courseId (lookup via RegistrationService)
+        attendanceService.markAttendance(student2.getId(), course1.getCourseId(), "Absent");
+        attendanceService.markAttendance(student1.getId(), course2.getCourseId(), "Tardy"); // Invalid
+
+        System.out.println("\n\n--- Querying Attendance ---");
+        attendanceService.displayAttendanceLog(student1); // Log for Alice
+        attendanceService.displayAttendanceLog();         // Full log
+
+        // --- Saving Data via Services ---
+        System.out.println("\n\n--- Saving All Data ---");
+        registrationService.saveAllRegistrations();
+        attendanceService.saveAttendanceData();
+
+        System.out.println("\nSession 9: SRP with Registration & Attendance Services Complete.");
     }
 }

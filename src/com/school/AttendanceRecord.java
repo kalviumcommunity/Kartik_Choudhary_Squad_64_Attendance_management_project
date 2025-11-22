@@ -1,46 +1,35 @@
 package com.school;
 
 public class AttendanceRecord implements Storable {
-    private int studentId;
-    private int courseId;
+    private Student student; // Changed from studentId to Student object
+    private Course course;   // Changed from courseId to Course object
     private String status;
 
-    // Constructor with validation
-    public AttendanceRecord(int studentId, int courseId, String status) {
-        this.studentId = studentId;
-        this.courseId = courseId;
-
-        if (status.equalsIgnoreCase("Present") || status.equalsIgnoreCase("Absent")) {
+    public AttendanceRecord(Student student, Course course, String status) {
+        this.student = student;
+        this.course = course;
+        if ("Present".equalsIgnoreCase(status) || "Absent".equalsIgnoreCase(status)) {
             this.status = status;
         } else {
             this.status = "Invalid";
-            System.out.println("⚠ Warning: Invalid attendance status provided for Student ID: " + studentId);
+            System.out.println("Warning: Invalid attendance status provided ('" + status + "'). Set to 'Invalid'.");
         }
     }
 
-    // Getters
-    public int getStudentId() {
-        return studentId;
-    }
+    public Student getStudent() { return student; } // Getter for Student object
+    public Course getCourse() { return course; }   // Getter for Course object
+    public String getStatus() { return status; }
 
-    public int getCourseId() {
-        return courseId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    // Display method
     public void displayRecord() {
-        System.out.println("AttendanceRecord -> Student ID: " + studentId +
-                           ", Course ID: C" + courseId +
-                           ", Status: " + status);
+        // Now we can get details directly from the objects
+        System.out.println("Attendance: Student " + student.getName() + " (ID: " + student.getId() + ")" +
+                           " in Course " + course.getCourseName() + " (ID: C" + course.getCourseId() + ")" +
+                           " - Status: " + status);
     }
 
-    // Implement Storable interface - CSV format
     @Override
     public String toDataString() {
-        return this.studentId + "," + this.courseId + "," + this.status;
+        // Save IDs for simplicity in file storage
+        return student.getId() + "," + course.getCourseId() + "," + status;
     }
 }
